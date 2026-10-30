@@ -1,0 +1,9 @@
+node_modules/
+build/
+dist/
+package-lock.json
+.DS_Store
+npm-debug.log*
+
+# Note: packages/*/patches/ must stay tracked - they hold our local fixes to the
+# upstream submodules. Do not add a broad rule that swallows them.

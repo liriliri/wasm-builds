@@ -1,0 +1,16 @@
+diff --git a/src/isotropichalfedgemesh.h b/src/isotropichalfedgemesh.h
+index 91cbd7f..ac1a8b4 100644
+--- a/src/isotropichalfedgemesh.h
++++ b/src/isotropichalfedgemesh.h
+@@ -101,7 +101,10 @@ private:
+     
+     static inline uint64_t makeHalfedgeKey(size_t first, size_t second)
+     {
+-        return (first << 32) | second;
++        // size_t is 32-bit under wasm32, so widen before shifting. Otherwise the
++        // key collapses to `second`, every halfedge pair collides and
++        // oppositeHalfedge is never linked, which inflates the mesh ~3x.
++        return (((uint64_t)first) << 32) | (uint64_t)second;
+     }
+     
+     static inline uint64_t swapHalfedgeKey(uint64_t key)

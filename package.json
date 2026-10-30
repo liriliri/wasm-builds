@@ -1,0 +1,17 @@
+{
+  "name": "wasm-builds",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Monorepo of small C++ libraries compiled to WebAssembly and published to npm",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "clean": "npm run clean --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

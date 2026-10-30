@@ -1,0 +1,8 @@
+[submodule "isotropicremesher"]
+	path = packages/isotropicremesher/upstream
+	url = https://github.com/huxingyi/isotropicremesher.git
+	# build.sh applies patches/*.patch to the submodule, so its worktree is
+	# expected to be dirty. Don't report that as repo noise; still report real
+	# commit changes (upstream moved) and untracked files.
+	ignore = dirty
+	shallow = true
