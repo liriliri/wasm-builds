@@ -6,3 +6,11 @@
 	# commit changes (upstream moved) and untracked files.
 	ignore = dirty
 	shallow = true
+[submodule "autoremesher"]
+	path = packages/autoremesher/upstream
+	url = https://github.com/huxingyi/autoremesher.git
+	# build.sh applies patches/*.patch to the submodule, so its worktree is
+	# expected to be dirty. Don't report that as repo noise; still report real
+	# commit changes (upstream moved) and untracked files.
+	ignore = dirty
+	shallow = true

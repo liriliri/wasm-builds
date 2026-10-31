@@ -1,0 +1,33 @@
+{
+  "name": "autoremesher",
+  "version": "0.1.0",
+  "description": "Automatic quad remeshing of triangulated surfaces, compiled to WebAssembly",
+  "license": "MIT",
+  "main": "./js/index.js",
+  "types": "./js/index.d.ts",
+  "files": [
+    "js/",
+    "build/",
+    "LICENSE",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "./build.sh",
+    "test": "node --test test/*.test.js",
+    "clean": "rm -rf build"
+  },
+  "keywords": [
+    "wasm",
+    "webassembly",
+    "mesh",
+    "remeshing",
+    "quad",
+    "autoremesher",
+    "geometry",
+    "3d"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

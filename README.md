@@ -12,6 +12,7 @@ the exact upstream commit stay visible.
 | Package | Upstream | License | Format |
 | --- | --- | --- | --- |
 | [isotropicremesher](packages/isotropicremesher) | [huxingyi/isotropicremesher](https://github.com/huxingyi/isotropicremesher) @ `d4674ce` | MIT | CJS |
+| [autoremesher](packages/autoremesher) | [huxingyi/autoremesher](https://github.com/huxingyi/autoremesher) @ `4a49f82` | MIT | CJS |
 
 ## Requirements
 
