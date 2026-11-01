@@ -33,11 +33,13 @@ if [ -d "$PATCH_DIR" ]; then
   for patch in "$PATCH_DIR"/*.patch; do
     # git -C changes cwd, so resolve the patch to an absolute path first.
     patch_abs="$(cd "$(dirname "$patch")" && pwd)/$(basename "$patch")"
-    if git -C "$UPSTREAM" apply --check --reverse "$patch_abs" 2>/dev/null; then
+    # --ignore-whitespace: upstream sources are CRLF; CI checkouts often
+    # normalize to LF, and a CRLF/LF mismatch makes plain `git apply` fail.
+    if git -C "$UPSTREAM" apply --ignore-whitespace --check --reverse "$patch_abs" 2>/dev/null; then
       echo "patch already applied: $(basename "$patch")"
-    elif git -C "$UPSTREAM" apply --check "$patch_abs" 2>/dev/null; then
+    elif git -C "$UPSTREAM" apply --ignore-whitespace --check "$patch_abs" 2>/dev/null; then
       echo "applying patch: $(basename "$patch")"
-      git -C "$UPSTREAM" apply "$patch_abs"
+      git -C "$UPSTREAM" apply --ignore-whitespace "$patch_abs"
     else
       echo "error: patch $(basename "$patch") does not apply to $UPSTREAM." >&2
       echo "       The upstream submodule may have moved; rebase the patch." >&2
