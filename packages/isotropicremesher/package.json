@@ -1,6 +1,6 @@
 {
   "name": "isotropicremesher",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Isotropic remeshing of triangulated surfaces, compiled to WebAssembly",
   "license": "MIT",
   "main": "./js/index.js",

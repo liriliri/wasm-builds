@@ -72,11 +72,14 @@ SOURCES=(
   "src/bindings.cpp"
 )
 
-# CJS-only build: produces build/autoremesher.js + autoremesher.wasm.
+# CJS build: produces build/autoremesher.js + autoremesher.wasm.
 # TBB is replaced by src/tbb_shim (sequential). Eigen is header-only.
 # STACK_SIZE=32mb: Eigen stack-allocates heavily; the default overflows.
-# STRICT=1 strips the legacy shim (~2KB); WASM=1 and SINGLE_FILE=0 are defaults
-# and omitted.
+# ENVIRONMENT=web,worker,node keeps browser + Node glue.
+# Do NOT set STRICT=1: js/index.js needs Module.instantiateWasm so Electron
+# preload can inject .wasm bytes (ENVIRONMENT_IS_NODE is false when
+# process.type==="renderer"). WASM=1 and SINGLE_FILE=0 are defaults.
+
 FLAGS=(
   -std=c++17
   -O3
@@ -93,7 +96,6 @@ FLAGS=(
   -s ALLOW_MEMORY_GROWTH=1
   -s INITIAL_MEMORY=128mb
   -s STACK_SIZE=32mb
-  -s STRICT=1
   -s EXIT_RUNTIME=0
   -s ASSERTIONS=0
   --no-entry

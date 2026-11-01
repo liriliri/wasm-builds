@@ -34,6 +34,23 @@ result.indices;  // Uint32Array, flat [i0, i1, i2, ...]
 
 The package is CommonJS-only; TypeScript types ship as `js/index.d.ts`.
 
+### Environments
+
+Works in **Node.js**, **browsers**, and **Electron preload** (where
+`process.type === "renderer"` makes emscripten's Node detection fail). The JS
+wrapper reads the `.wasm` via `fs` and instantiates it through
+`instantiateWasm` whenever Node APIs are available; in the browser, pass
+`locateFile` / `wasmBinary` to `loadModule()` if your bundler does not serve
+the `.wasm` next to the glue script:
+
+```js
+const { loadModule, remesh } = require('isotropicremesher');
+
+await loadModule({
+  locateFile: (file) => `https://cdn.example.com/${file}`,
+});
+```
+
 By default the remesher targets the mesh's own average edge length. Use one of:
 
 - `targetTriangleCount` — desired number of triangles

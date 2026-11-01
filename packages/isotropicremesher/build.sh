@@ -56,9 +56,12 @@ SOURCES=(
   "src/bindings.cpp"
 )
 
-# CJS-only build: produces build/isotropicremesher.js + isotropicremesher.wasm.
-# STRICT=1 strips the legacy shim (~2KB); WASM=1 and SINGLE_FILE=0 are defaults
-# and omitted.
+# CJS build: produces build/isotropicremesher.js + isotropicremesher.wasm.
+# ENVIRONMENT=web,worker,node keeps browser + Node glue.
+# Do NOT set STRICT=1: js/index.js needs Module.instantiateWasm so Electron
+# preload can inject .wasm bytes (ENVIRONMENT_IS_NODE is false when
+# process.type==="renderer"). WASM=1 and SINGLE_FILE=0 are defaults.
+
 FLAGS=(
   -std=c++17
   -O3
@@ -70,7 +73,6 @@ FLAGS=(
   -s ENVIRONMENT=web,worker,node
   -s ALLOW_MEMORY_GROWTH=1
   -s INITIAL_MEMORY=64mb
-  -s STRICT=1
   -s EXIT_RUNTIME=0
   -s ASSERTIONS=0
   --no-entry

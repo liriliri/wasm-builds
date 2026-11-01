@@ -41,6 +41,23 @@ where the algorithm treats it as off): `scaling`, `modelType`
 
 The package is CommonJS-only; TypeScript types ship as `js/index.d.ts`.
 
+### Environments
+
+Works in **Node.js**, **browsers**, and **Electron preload** (where
+`process.type === "renderer"` makes emscripten's Node detection fail). The JS
+wrapper reads the `.wasm` via `fs` and instantiates it through
+`instantiateWasm` whenever Node APIs are available; in the browser, pass
+`locateFile` / `wasmBinary` to `loadModule()` if your bundler does not serve
+the `.wasm` next to the glue script:
+
+```js
+const { loadModule, remesh } = require('autoremesher');
+
+await loadModule({
+  locateFile: (file) => `https://cdn.example.com/${file}`,
+});
+```
+
 ## Building from source
 
 The C++ sources come from the `upstream/` git submodule (pinned to

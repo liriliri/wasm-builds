@@ -22,8 +22,23 @@ export interface RemeshResult {
   indices: Uint32Array;
 }
 
-/** Loads (and caches) the WebAssembly module. */
-export function loadModule(): Promise<any>;
+export interface LoadModuleOptions {
+  /** Preloaded .wasm bytes. Auto-filled from disk when Node fs is available. */
+  wasmBinary?: Buffer | Uint8Array | ArrayBuffer;
+  /** Custom WebAssembly.instantiate hook (takes precedence over wasmBinary). */
+  instantiateWasm?: (
+    imports: WebAssembly.Imports,
+    successCallback: (
+      instance: WebAssembly.Instance,
+      module: WebAssembly.Module,
+    ) => void,
+  ) => object;
+  /** Resolve the .wasm URL in the browser / bundlers. */
+  locateFile?: (file: string, prefix?: string) => string;
+}
+
+/** Loads (and caches) the WebAssembly module. Overrides apply only on first call. */
+export function loadModule(overrides?: LoadModuleOptions): Promise<any>;
 
 /** Remeshes a triangle mesh toward isotropic (equilateral) triangles. */
 export function remesh(options: RemeshOptions): Promise<RemeshResult>;

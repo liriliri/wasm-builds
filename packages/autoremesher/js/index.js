@@ -2,9 +2,51 @@ const createAutoRemesherModule = require('../build/autoremesher.js');
 
 let modulePromise = null;
 
-function loadModule() {
+function tryReadWasmBinary() {
+  try {
+    // Require lazily so browser bundlers without an fs polyfill can still load.
+    const fs = require('node:fs');
+    const path = require('node:path');
+    return fs.readFileSync(path.join(__dirname, '../build/autoremesher.wasm'));
+  } catch {
+    return undefined;
+  }
+}
+
+function toUint8Array(binary) {
+  // Buffer is a Uint8Array subclass on modern Node.
+  return binary instanceof Uint8Array ? binary : new Uint8Array(binary);
+}
+
+/** Wire local/injected bytes through instantiateWasm (Module.wasmBinary is unused). */
+function withLocalWasm(config) {
+  if (config.instantiateWasm) return config;
+
+  const wasmBinary = config.wasmBinary || tryReadWasmBinary();
+  if (!wasmBinary) return config;
+
+  const bytes = toUint8Array(wasmBinary);
+  return Object.assign({}, config, {
+    instantiateWasm(imports, successCallback) {
+      WebAssembly.instantiate(bytes, imports).then((output) => {
+        successCallback(output.instance, output.module);
+      });
+      // Empty object → async completion via successCallback.
+      return {};
+    },
+  });
+}
+
+/**
+ * Load (and cache) the wasm module.
+ * Electron preload needs local instantiate (process.type === "renderer").
+ * Browser: pass locateFile / wasmBinary when the .wasm is not next to the glue.
+ */
+function loadModule(overrides) {
   if (!modulePromise) {
-    modulePromise = createAutoRemesherModule();
+    modulePromise = createAutoRemesherModule(
+      withLocalWasm(Object.assign({}, overrides))
+    );
   }
   return modulePromise;
 }
