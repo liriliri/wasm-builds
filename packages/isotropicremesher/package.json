@@ -3,6 +3,10 @@
   "version": "0.1.1",
   "description": "Isotropic remeshing of triangulated surfaces, compiled to WebAssembly",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liriliri/wasm-builds.git"
+  },
   "main": "./js/index.js",
   "types": "./js/index.d.ts",
   "files": [
